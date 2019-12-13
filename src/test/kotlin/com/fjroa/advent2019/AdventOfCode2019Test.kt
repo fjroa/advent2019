@@ -1,6 +1,6 @@
 package com.fjroa.advent2019
 
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
@@ -20,4 +20,30 @@ class AdventOfCode2019Test {
         assertEquals(9801, advent.intCodeProgram(intArrayOf(2,4,4,5,99,0),4,4))
         assertEquals(30, advent.intCodeProgram(intArrayOf(1,1,1,4,99,5,6,0,99),1,1))
     }
+
+    @Test
+    fun wiresIntersection() {
+        assertEquals(6, advent.findWiresIntersections(arrayOf("R8,U5,L5,D3","U7,R6,D4,L4")))
+        assertEquals(159, advent.findWiresIntersections(arrayOf("R75,D30,R83,U83,L12,D49,R71,U7,L72","U62,R66,U55,R34,D71,R55,D58,R83")))
+        assertEquals(135, advent.findWiresIntersections(arrayOf("R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51","U98,R91,D20,R16,D67,R40,U7,R15,U6,R7")))
+    }
+
+    @Test
+    fun minimizedWiresIntersection() {
+        assertEquals(30, advent.findMinimizedWiresIntersections(arrayOf("R8,U5,L5,D3","U7,R6,D4,L4")))
+        assertEquals(610, advent.findMinimizedWiresIntersections(arrayOf("R75,D30,R83,U83,L12,D49,R71,U7,L72","U62,R66,U55,R34,D71,R55,D58,R83")))
+        assertEquals(410, advent.findMinimizedWiresIntersections(arrayOf("R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51","U98,R91,D20,R16,D67,R40,U7,R15,U6,R7")))
+    }
+
+    @Test
+    fun validatePassword() {
+        assertTrue(advent.validatePassword("111111"))
+        assertFalse(advent.validatePassword("223450"))
+        assertFalse(advent.validatePassword("123789"))
+        assertTrue(advent.validatePassword("112233", true))
+        assertFalse(advent.validatePassword("123444", true))
+        assertTrue(advent.validatePassword("111122", true))
+    }
+
+
 }
