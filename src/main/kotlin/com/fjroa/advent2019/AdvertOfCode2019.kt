@@ -38,12 +38,21 @@ class AdventOfCode2019 : ApplicationListener<ApplicationReadyEvent> {
             println("Result of day 4.2 : ${day4(178416, 676461, true)}")
         })
         println(measureTimeMillis {
-            println("Result of day 5 : ${day5(ClassPathResource("day1.txt").file)}")
+           // println("Result of day 5 : ${day5(ClassPathResource("day5.txt").file)}")
+        })
+        println(measureTimeMillis {
+            println("Result of day 5.2 : ${day5_2(ClassPathResource("day5.txt").file)}")
         })
     }
 
     private fun day5(file: File): Int {
-        return file.readLines().sumBy{ calcFuel(it.toInt()) }
+        val values = file.readText().trim().split(",").map { it.toInt() }.toIntArray()
+        return intCodeProgram(values,0, 0, 1)
+    }
+
+    private fun day5_2(file: File): Int {
+        val values = file.readText().trim().split(",").map { it.toInt() }.toIntArray()
+        return intCodeProgram(values,0, 0, 5)
     }
 
     private fun day4(lower: Int, upper: Int, advanced: Boolean = false): Int {
@@ -120,22 +129,57 @@ class AdventOfCode2019 : ApplicationListener<ApplicationReadyEvent> {
 
     internal fun calcFuel(mass: Int) = floor(mass.div(3f)).toInt().minus(2)
 
-    internal fun intCodeProgram(i: IntArray, noun: Int, verb: Int): Int {
+    internal fun intCodeProgram(i: IntArray, noun: Int, verb: Int, input: Int = -1): Int {
         var pos = 0
-        i[1] = noun
-        i[2] = verb
+        if (input == -1) {
+            i[1] = noun
+            i[2] = verb
+        }
         var lastCalculation = 0
+        var output = 0
         while (i[pos] != 99) {
+            var opCode = i[pos]
+            var firstParamImmediateMode = false
+            var secondParamImmediateMode = false
+            if (opCode > 100) {
+                val reverseOpCode = opCode.toString().reversed()
+                firstParamImmediateMode = reverseOpCode.substring(2,3) == "1"
+                if (opCode > 1000) {
+                    secondParamImmediateMode = reverseOpCode.substring(3, 4) == "1"
+                }
+                opCode = reverseOpCode.substring(0,1).toInt()
+            }
             when {
-                i[pos] == 1 -> lastCalculation = i[i[pos+1]] + i[i[pos+2]]
-                i[pos] == 2 -> lastCalculation = i[i[pos+1]] * i[i[pos+2]]
+                opCode == 1 -> {lastCalculation = getValueIntCodeProgram(i,pos+1,firstParamImmediateMode) + getValueIntCodeProgram(i,pos+2,secondParamImmediateMode); i[i[pos+3]] = lastCalculation; pos +=4}
+                opCode == 2 -> {lastCalculation = getValueIntCodeProgram(i,pos+1,firstParamImmediateMode) * getValueIntCodeProgram(i,pos+2,secondParamImmediateMode); i[i[pos+3]] = lastCalculation; pos +=4}
+                opCode == 3 -> {i[i[pos+1]] = input; pos +=2}
+                opCode == 4 -> {output = getValueIntCodeProgram(i,pos+1,firstParamImmediateMode); pos +=2}
+                opCode == 5 -> {if(getValueIntCodeProgram(i,pos+1,firstParamImmediateMode) != 0) pos = getValueIntCodeProgram(i,pos+2,secondParamImmediateMode) else pos +=3}
+                opCode == 6 -> {if(getValueIntCodeProgram(i,pos+1,firstParamImmediateMode) == 0) pos = getValueIntCodeProgram(i,pos+2,secondParamImmediateMode) else pos +=3}
+                opCode == 7 -> {if(getValueIntCodeProgram(i,pos+1,firstParamImmediateMode) < getValueIntCodeProgram(i,pos+2,secondParamImmediateMode)) i[i[pos+3]] = 1 else i[i[pos+3]]=0; pos +=4}
+                opCode == 8 -> {if(getValueIntCodeProgram(i,pos+1,firstParamImmediateMode) == getValueIntCodeProgram(i,pos+2,secondParamImmediateMode)) i[i[pos+3]] = 1 else i[i[pos+3]]=0; pos +=4}
                 else -> return -1
             }
-            i[i[pos+3]] = lastCalculation
-            pos += 4
+            if (output != 0) {
+                if (i[pos] != 99)
+                    return -1
+                else
+                    return output
+            }
+            //System.out.println(pos)
+        }
+        if (input != -1) {
+            return output
         }
         return lastCalculation
     }
+
+    private fun getValueIntCodeProgram(i: IntArray, pos: Int, immediateMode: Boolean): Int {
+        if (immediateMode)
+            return i[pos]
+        return i[i[pos]]
+    }
+
 
     fun findWiresIntersections(wires: Array<String>): Int {
         val n = 20000

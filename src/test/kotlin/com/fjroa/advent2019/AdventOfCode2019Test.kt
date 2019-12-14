@@ -19,6 +19,21 @@ class AdventOfCode2019Test {
         assertEquals(6, advent.intCodeProgram(intArrayOf(2,3,0,3,99),3,0))
         assertEquals(9801, advent.intCodeProgram(intArrayOf(2,4,4,5,99,0),4,4))
         assertEquals(30, advent.intCodeProgram(intArrayOf(1,1,1,4,99,5,6,0,99),1,1))
+        assertEquals(500, advent.intCodeProgram(intArrayOf(3,0,4,0,99),0,0, 500))
+        assertEquals(99, advent.intCodeProgram(intArrayOf(1002,4,3,4,33),4,3))
+        assertEquals(99, advent.intCodeProgram(intArrayOf(1101,100,-1,4,0),100,-1))
+        assertEquals(1, advent.intCodeProgram(intArrayOf(3,9,8,9,10,9,4,9,99,-1,8),0,0, 8))
+        assertEquals(0, advent.intCodeProgram(intArrayOf(3,9,8,9,10,9,4,9,99,-1,8),0,0, 7))
+        assertEquals(1, advent.intCodeProgram(intArrayOf(3,3,1108,-1,8,3,4,3,99),0,0, 8))
+        assertEquals(0, advent.intCodeProgram(intArrayOf(3,3,1108,-1,8,3,4,3,99),0,0, 7))
+        assertEquals(1, advent.intCodeProgram(intArrayOf(3,9,7,9,10,9,4,9,99,-1,8),0,0, 7))
+        assertEquals(0, advent.intCodeProgram(intArrayOf(3,9,7,9,10,9,4,9,99,-1,8),0,0, 8))
+        assertEquals(1, advent.intCodeProgram(intArrayOf(3,3,1107,-1,8,3,4,3,99),0,0, 7))
+        assertEquals(0, advent.intCodeProgram(intArrayOf(3,3,1107,-1,8,3,4,3,99),0,0, 8))
+        assertEquals(1, advent.intCodeProgram(intArrayOf(3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9),0,0, 7))
+        assertEquals(0, advent.intCodeProgram(intArrayOf(3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9),0,0, 0))
+        assertEquals(1, advent.intCodeProgram(intArrayOf(3,3,1105,-1,9,1101,0,0,12,4,12,99,1),0,0, 7))
+        assertEquals(0, advent.intCodeProgram(intArrayOf(3,3,1105,-1,9,1101,0,0,12,4,12,99,1),0,0, 0))
     }
 
     @Test
